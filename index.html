@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess-number-game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-brain"></i>Угадай число</h1>
+            <p class="subtitle">  
+                Я загадал число от 1 до 100. Попробуй отгодать его за минимальное количество попыток!
+            </p>
+        </header>
+
+        <main class="game-area">
+            <div class="game-panel">
+                <div class="stats">
+                    <div class="stat-box">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Попыток: <strong id="attemptsCount">0</strong></span>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-history"></i>
+                        <span>Рекород: <strong id="bestScore">∞</strong></span>
+                    </div>
+                </div>
+
+                <div class="hint" id="hintText">
+                    Введи число и нажми проверить
+                </div>
+
+                <div class="input-group">
+                    <input type="number" id="userGuess" min="1" max="100" placeholder="Число от 1 до 100">
+                    <button class="btn-primary" id="checkBtn">
+                        <i class="fas fa-check"></i>
+                        Проверить
+                    </button>
+                    <button class="btn-secondary" id="restartBtn">
+                        <i class="fas fa-redo"></i>
+                        Новая игра
+                    </button>
+                </div>
+
+                <div class="difficulty">
+                    <label for="rangeSlider">
+                        <i class="fas fa-sliders-h"></i>
+                        Сложность:
+                        <span id="rangeValue">1-100</span>
+                    </label>
+                    <input type="range" id="rangeSlider" min="1" max="5" value="3">
+                     <div class="range-labels">
+                        <span>Легко</span>
+                        <span>Средне</span>
+                        <span>Сложно</span>
+                        <span>Эксперт</span>
+                        <span>Безумие</span>
+                     </div>
+                </div>
+            </div>
+
+            <div class="history-panel">
+                <h3>
+                    <i class="fas fa-scroll"></i>
+                    История попыток
+                </h3>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">
+                        Здесь будет история ваших попыток...
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Сделано с <i class="fas fa-heart"></i>на JavaScript</p>
+        </footer>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>

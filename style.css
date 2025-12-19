@@ -1,0 +1,353 @@
+/* ОБЩИЕ СБРОСЫ И ШРИФТЫ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    padding: 30px;
+}
+
+/* ЗАГОЛОВОК */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+h1 {
+    color: #2d3436;
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+h1 i {
+    color: #6a11cb;
+}
+
+.subtitle {
+    color: #636e72;
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* ОСНОВНАЯ ОБЛАСТЬ ИГРЫ */
+.game-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .game-area {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ЛЕВАЯ ПАНЕЛЬ (ИГРА) */
+.game-panel {
+    background: #f8f9fa;
+    border-radius: 18px;
+    padding: 25px;
+    border: 1px solid #e9ecef;
+}
+
+/* СТАТИСТИКА */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    gap: 15px;
+}
+
+.stat-box {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e9ecef;
+}
+
+.stat-box i {
+    font-size: 1.8rem;
+    color: #6a11cb;
+}
+
+.stat-box span {
+    font-size: 1.1rem;
+    color: #2d3436;
+}
+
+.stat-box strong {
+    font-size: 1.5rem;
+    color: #2575fc;
+}
+
+/* ПОДСКАЗКА */
+.hint {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2d3436;
+    border: 2px dashed #74b9ff;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.hint.success {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.hint.warning {
+    background: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+/* ПОЛЕ ВВОДА И КНОПКИ */
+.input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+#userGuess {
+    flex: 1;
+    min-width: 200px;
+    padding: 18px 20px;
+    border: 2px solid #dfe6e9;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+#userGuess:focus {
+    outline: none;
+    border-color: #74b9ff;
+    box-shadow: 0 0 0 3px rgba(116, 185, 255, 0.2);
+}
+
+.btn-primary, .btn-secondary {
+    padding: 18px 25px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(106, 17, 203, 0.3);
+}
+
+.btn-secondary {
+    background: #f1f2f6;
+    color: #2d3436;
+    border: 1px solid #dfe6e9;
+}
+
+.btn-secondary:hover {
+    background: #dfe4ea;
+}
+
+/* СЛОЖНОСТЬ */
+.difficulty {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.difficulty label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2d3436;
+}
+
+#rangeSlider {
+    width: 100%;
+    height: 10px;
+    -webkit-appearance: none;
+    background: linear-gradient(to right, #00b09b, #96c93d, #ffd700, #ff7e00, #ff0000);
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+#rangeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #6a11cb;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #636e72;
+    font-weight: 500;
+}
+
+/* ПРАВАЯ ПАНЕЛЬ (ИСТОРИЯ) */
+.history-panel {
+    background: #f8f9fa;
+    border-radius: 18px;
+    padding: 25px;
+    border: 1px solid #e9ecef;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-panel h3 {
+    color: #2d3436;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.history-item {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #74b9ff;
+    animation: fadeIn 0.5s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.history-item.too-high {
+    border-left-color: #ff7675;
+}
+
+.history-item.too-low {
+    border-left-color: #74b9ff;
+}
+
+.history-item.correct {
+    border-left-color: #00b894;
+    background: #f1fff9;
+}
+
+.history-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3436;
+}
+
+.history-hint {
+    font-size: 1rem;
+    color: #636e72;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-empty {
+    text-align: center;
+    color: #b2bec3;
+    font-style: italic;
+    padding: 30px;
+    font-size: 1.1rem;
+}
+
+/* ПОДВАЛ */
+footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+    color: #636e72;
+    font-size: 1rem;
+}
+
+footer i {
+    color: #ff7675;
+    margin: 0 5px;
+}
+
+/* АНИМАЦИЯ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 0.5s ease;
+}
