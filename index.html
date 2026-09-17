@@ -2,437 +2,118 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Сундук с алмазом</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: radial-gradient(circle at 50% 40%, #1a1a3e, #0d0d1a);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-    overflow: hidden;
-  }
-
-  h1 {
-    color: #ffd700;
-    font-size: 28px;
-    margin-bottom: 40px;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-  }
-
-  /* === 3D СЦЕНА С ПЕРСПЕКТИВОЙ === */
-  .scene {
-    position: relative;
-    width: 300px;
-    height: 260px;
-    perspective: 900px;
-    perspective-origin: 50% 35%;
-  }
-
-  .chest-3d {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
-    height: 170px;
-    transform-style: preserve-3d;
-  }
-
-  /* --- Корпус --- */
-  .chest-body {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 120px;
-    background:
-      linear-gradient(to bottom,
-        #8B5A2B 0%, #8B5A2B 8%,
-        #6B4423 8%, #6B4423 12%,
-        #8B5A2B 12%, #8B5A2B 92%,
-        #6B4423 92%, #6B4423 96%,
-        #5C3A1B 96%);
-    border: 3px solid #5C3A1B;
-    border-radius: 4px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
-  }
-
-  /* Деревянные планки */
-  .chest-body::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-      to right,
-      transparent 0,
-      transparent 38px,
-      rgba(0,0,0,0.15) 38px,
-      rgba(0,0,0,0.15) 40px
-    );
-  }
-
-  /* Тёмная внутренность (видна когда крышка открыта) */
-  .chest-interior {
-    position: absolute;
-    top: 0;
-    left: 3px;
-    right: 3px;
-    height: 14px;
-    background: linear-gradient(to bottom, #1a0a00, #2a1505);
-    border-radius: 2px;
-    z-index: 1;
-  }
-
-  /* Металлические углы */
-  .corner {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: linear-gradient(135deg, #aaa, #666);
-    border: 1.5px solid #555;
-    border-radius: 2px;
-    z-index: 2;
-  }
-  .corner.tl { top: -3px; left: -3px; }
-  .corner.tr { top: -3px; right: -3px; }
-  .corner.bl { bottom: -3px; left: -3px; }
-  .corner.br { bottom: -3px; right: -3px; }
-
-  /* Замок */
-  .lock {
-    position: absolute;
-    top: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 28px;
-    background: linear-gradient(145deg, #d4a017, #8B6508);
-    border: 2px solid #8B6508;
-    border-radius: 4px;
-    z-index: 3;
-  }
-  .lock::after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 5px;
-    height: 5px;
-    background: #3a2510;
-    border-radius: 50%;
-    box-shadow: 0 5px 0 #3a2510;
-  }
-
-  /* --- Крышка (3D поворот) --- */
-  .lid-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 55px;
-    transform-style: preserve-3d;
-    z-index: 10;
-  }
-
-  .lid {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transform-origin: center bottom;
-    transform: rotateX(0deg);
-    transition: transform 0.9s cubic-bezier(0.28, 0.9, 0.45, 1);
-    transform-style: preserve-3d;
-  }
-
-  .lid.open {
-    transform: rotateX(-125deg);
-  }
-
-  /* Лицевая сторона крышки */
-  .lid-front {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    background:
-      linear-gradient(to bottom,
-        #A0673A 0%, #A0673A 10%,
-        #8B5A2B 10%, #8B5A2B 90%,
-        #6B4423 90%);
-    border: 3px solid #5C3A1B;
-    border-radius: 4px 4px 2px 2px;
-    box-shadow: inset 0 -4px 10px rgba(0,0,0,0.3);
-  }
-
-  .lid-front::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-      to right,
-      transparent 0,
-      transparent 38px,
-      rgba(0,0,0,0.12) 38px,
-      rgba(0,0,0,0.12) 40px
-    );
-  }
-
-  /* Металлическая окантовка крышки */
-  .lid-front::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0; right: 0;
-    height: 5px;
-    background: linear-gradient(to bottom, #999, #666);
-    border-top: 1px solid #555;
-  }
-
-  /* Заклёпки */
-  .rivet {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: radial-gradient(circle at 30% 30%, #d4a017, #8B6508);
-    border-radius: 50%;
-    border: 1px solid #5C3A1B;
-    top: 18px;
-  }
-
-  /* Обратная сторона крышки (видна при открытии) */
-  .lid-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    transform: rotateX(180deg);
-    background: linear-gradient(to bottom, #3a2010, #2a1505);
-    border: 3px solid #1a0a00;
-    border-radius: 2px 2px 4px 4px;
-  }
-
-  /* Внутренняя сторона крышки (тёмное дерево) */
-  .lid-back::before {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    background: repeating-linear-gradient(
-      to right,
-      transparent 0,
-      transparent 38px,
-      rgba(0,0,0,0.2) 38px,
-      rgba(0,0,0,0.2) 40px
-    );
-  }
-
-  /* Петли */
-  .hinge {
-    position: absolute;
-    bottom: -5px;
-    width: 20px;
-    height: 10px;
-    background: linear-gradient(to bottom, #999, #555);
-    border: 1px solid #444;
-    border-radius: 3px 3px 1px 1px;
-    z-index: 4;
-  }
-  .hinge.left { left: 25px; }
-  .hinge.right { right: 25px; }
-
-  /* === АЛМАЗ === */
-  .gem-container {
-    position: absolute;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 50px;
-    opacity: 0;
-    z-index: 20;
-  }
-
-  .gem-container.fly {
-    animation: gemFly 1.2s cubic-bezier(0.25, 0.8, 0.3, 1) forwards;
-  }
-
-  @keyframes gemFly {
-    0%   { opacity: 0; transform: translateX(-50%) scale(0.1) translateY(20px) rotate(0deg); }
-    20%  { opacity: 1; transform: translateX(-50%) scale(1.4) translateY(-10px) rotate(45deg); }
-    50%  { opacity: 1; transform: translateX(-50%) scale(1) translateY(-120px) rotate(180deg); }
-    80%  { opacity: 1; transform: translateX(-50%) scale(1) translateY(-80px) rotate(310deg); }
-    100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(-100px) rotate(360deg); }
-  }
-
-  /* Свечение */
-  .glow {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 30px;
-    background: radial-gradient(ellipse, rgba(255,215,0,0.3), transparent);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-  .glow.active { opacity: 1; }
-
-  /* Кнопка */
-  .btn {
-    margin-top: 50px;
-    padding: 14px 36px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a1a2e;
-    background: linear-gradient(135deg, #ffd700, #ff9500);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.5);
-    transition: transform 0.2s, box-shadow 0.2s;
-    letter-spacing: 1px;
-  }
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 149, 0, 0.7); }
-  .btn:active { transform: translateY(0); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  .spark {
-    position: absolute;
-    width: 4px; height: 4px;
-    background: #ffd700;
-    border-radius: 50%;
-    pointer-events: none;
-    box-shadow: 0 0 6px #ffd700;
-  }
-
-  @keyframes sparkFly {
-    0%   { opacity: 1; transform: translate(0,0) scale(1); }
-    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(circle at 50% 40%,#1a1a3e,#0d0d1a);min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:'Segoe UI',sans-serif;overflow:hidden;padding:16px}
+h1{color:#ffd700;font-size:clamp(20px,4vw,28px);margin-bottom:24px;text-shadow:0 0 20px rgba(255,215,0,0.4);text-align:center}
+.scene{position:relative;width:min(80vw,320px);height:min(90vw,280px);perspective:900px;perspective-origin:50% 35%}
+.chest-3d{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:100%;height:100%;transform-style:preserve-3d}
+.chest-body{position:absolute;bottom:0;width:100%;height:70%;background:linear-gradient(to bottom,#8B5A2B 0%,#8B5A2B 8%,#6B4423 8%,#6B4423 12%,#8B5A2B 12%,#8B5A2B 92%,#6B4423 92%,#6B4423 96%,#5C3A1B 96%);border:3px solid #5C3A1B;border-radius:4px;box-shadow:inset 0 0 20px rgba(0,0,0,0.4)}
+.chest-body::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0,transparent 38px,rgba(0,0,0,0.15) 38px,rgba(0,0,0,0.15) 40px)}
+.chest-interior{position:absolute;top:0;left:3px;right:3px;height:14%;background:linear-gradient(to bottom,#1a0a00,#2a1505);border-radius:2px;z-index:1}
+.corner{position:absolute;width:12%;height:12%;background:linear-gradient(135deg,#aaa,#666);border:1.5px solid #555;border-radius:2px;z-index:2}
+.corner.tl{top:-10%;left:-10%}.corner.tr{top:-10%;right:-10%}.corner.bl{bottom:-10%;left:-10%}.corner.br{bottom:-10%;right:-10%}
+.lock{position:absolute;top:30%;left:50%;transform:translateX(-50%);width:18%;height:22%;background:linear-gradient(145deg,#d4a017,#8B6508);border:2px solid #8B6508;border-radius:4px;z-index:3}
+.lock::after{content:'';position:absolute;top:35%;left:50%;transform:translateX(-50%);width:35%;height:35%;background:#3a2510;border-radius:50%;box-shadow:0 5px 0 #3a2510}
+.lid-wrapper{position:absolute;top:0;left:0;width:100%;height:32%;transform-style:preserve-3d;z-index:10}
+.lid{position:absolute;width:100%;height:100%;transform-origin:center bottom;transform:rotateX(0deg);transition:transform 0.9s cubic-bezier(0.28,0.9,0.45,1);transform-style:preserve-3d}
+.lid.open{transform:rotateX(-125deg)}
+.lid-front{position:absolute;inset:0;backface-visibility:hidden;background:linear-gradient(to bottom,#A0673A 0%,#A0673A 10%,#8B5A2B 10%,#8B5A2B 90%,#6B4423 90%);border:3px solid #5C3A1B;border-radius:4px 4px 2px 2px;box-shadow:inset 0 -4px 10px rgba(0,0,0,0.3)}
+.lid-front::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0,transparent 38px,rgba(0,0,0,0.12) 38px,rgba(0,0,0,0.12) 40px)}
+.lid-front::after{content:'';position:absolute;bottom:0;left:0;right:0;height:8%;background:linear-gradient(to bottom,#999,#666);border-top:1px solid #555}
+.rivet{position:absolute;width:6%;height:6%;background:radial-gradient(circle at 30% 30%,#d4a017,#8B6508);border-radius:50%;border:1px solid #5C3A1B;top:25%}
+.lid-back{position:absolute;inset:0;backface-visibility:hidden;transform:rotateX(180deg);background:linear-gradient(to bottom,#3a2010,#2a1505);border:3px solid #1a0a00;border-radius:2px 2px 4px 4px}
+.lid-back::before{content:'';position:absolute;inset:4px;background:repeating-linear-gradient(to right,transparent 0,transparent 38px,rgba(0,0,0,0.2) 38px,rgba(0,0,0,0.2) 40px)}
+.hinge{position:absolute;bottom:-8%;width:20%;height:14%;background:linear-gradient(to bottom,#999,#555);border:1px solid #444;border-radius:3px 3px 1px 1px;z-index:4}
+.hinge.left{left:15%}.hinge.right{right:15%}
+.gem-container{position:absolute;bottom:45%;left:50%;transform:translateX(-50%) scale(0.8);width:40%;height:40%;opacity:0;z-index:20}
+.gem-container.fly{animation:gemFly 1.2s cubic-bezier(0.25,0.8,0.3,1) forwards}
+@keyframes gemFly{0%{opacity:0;transform:translateX(-50%) scale(0.1) translateY(20%) rotate(0deg)}20%{opacity:1;transform:translateX(-50%) scale(1.4) translateY(-5%) rotate(45deg)}50%{opacity:1;transform:translateX(-50%) scale(1) translateY(-60%) rotate(180deg)}80%{opacity:1;transform:translateX(-50%) scale(1) translateY(-40%) rotate(310deg)}100%{opacity:1;transform:translateX(-50%) scale(1) translateY(-50%) rotate(360deg)}}
+.glow{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);width:80%;height:16%;background:radial-gradient(ellipse,rgba(255,215,0,0.3),transparent);border-radius:50%;opacity:0;transition:opacity 0.5s}
+.glow.active{opacity:1}
+.btn{margin-top:20px;padding:12px 28px;font-size:clamp(16px,3vw,18px);font-weight:bold;color:#1a1a2e;background:linear-gradient(135deg,#ffd700,#ff9500);border:none;border-radius:10px;cursor:pointer;box-shadow:0 4px 15px rgba(255,149,0,0.5);transition:transform 0.2s,box-shadow 0.2s;letter-spacing:1px;width:100%;max-width:260px;text-align:center}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,149,0,0.7)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.spark{position:absolute;width:4px;height:4px;background:#ffd700;border-radius:50%;pointer-events:none;box-shadow:0 0 6px #ffd700}
+@keyframes sparkFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
 </style>
 </head>
 <body>
-
-<h1>🪙 Сундук сокровищ</h1>
-
+<h1>Сундук сокровищ</h1>
 <div class="scene">
-  <div class="glow" id="glow"></div>
-
-  <div class="chest-3d" id="chest">
-    <!-- Корпус -->
-    <div class="chest-body">
-      <div class="chest-interior"></div>
-      <div class="corner tl"></div>
-      <div class="corner tr"></div>
-      <div class="corner bl"></div>
-      <div class="corner br"></div>
-      <div class="lock"></div>
-    </div>
-
-    <!-- Крышка (3D) -->
-    <div class="lid-wrapper">
-      <div class="lid" id="lid">
-        <div class="lid-front">
-          <div class="rivet" style="left: 20px;"></div>
-          <div class="rivet" style="left: 50%; transform: translateX(-50%);"></div>
-          <div class="rivet" style="right: 20px;"></div>
-        </div>
-        <div class="lid-back"></div>
-        <div class="hinge left"></div>
-        <div class="hinge right"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Алмаз -->
-  <div class="gem-container" id="gem">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-      <defs>
-        <linearGradient id="gemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stop-color="#e0fbff"/>
-          <stop offset="30%"  stop-color="#80d8ff"/>
-          <stop offset="60%"  stop-color="#40c4ff"/>
-          <stop offset="100%" stop-color="#0091ea"/>
-        </linearGradient>
-        <linearGradient id="gemShine" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.8"/>
-          <stop offset="50%"  stop-color="#ffffff" stop-opacity="0.1"/>
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="30,15 70,15 90,40 50,90 10,40" fill="url(#gemGrad)" stroke="#0277bd" stroke-width="1.5"/>
-      <polygon points="30,15 70,15 50,40" fill="url(#gemShine)" stroke="#0288d1" stroke-width="1" opacity="0.7"/>
-      <polygon points="30,15 10,40 50,40" fill="#b3e5fc" opacity="0.6"/>
-      <polygon points="70,15 90,40 50,40" fill="#4fc3f7" opacity="0.5"/>
-      <polygon points="10,40 50,90 50,40" fill="#0288d1" opacity="0.3"/>
-      <polygon points="90,40 50,90 50,40" fill="#01579b" opacity="0.3"/>
-      <ellipse cx="40" cy="25" rx="6" ry="3" fill="#fff" opacity="0.8" transform="rotate(-30, 40, 25)"/>
-    </svg>
-  </div>
+<div class="glow" id="glow"></div>
+<div class="chest-3d">
+<div class="chest-body">
+<div class="chest-interior"></div>
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
+<div class="lock"></div>
 </div>
-
-<button class="btn" id="openBtn">🔓 Открыть сундук</button>
-
+<div class="lid-wrapper">
+<div class="lid" id="lid">
+<div class="lid-front">
+<div class="rivet" style="left:15%"></div>
+<div class="rivet" style="left:50%;transform:translateX(-50%)"></div>
+<div class="rivet" style="right:15%"></div>
+</div>
+<div class="lid-back"></div>
+<div class="hinge left"></div>
+<div class="hinge right"></div>
+</div>
+</div>
+</div>
+<div class="gem-container" id="gem">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+<defs>
+<linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#e0fbff"/>
+<stop offset="30%" stop-color="#80d8ff"/>
+<stop offset="60%" stop-color="#40c4ff"/>
+<stop offset="100%" stop-color="#0091ea"/>
+</linearGradient>
+<linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#fff" stop-opacity="0.8"/>
+<stop offset="50%" stop-color="#fff" stop-opacity="0.1"/>
+<stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<polygon points="30,15 70,15 90,40 50,90 10,40" fill="url(#g1)" stroke="#0277bd" stroke-width="1.5"/>
+<polygon points="30,15 70,15 50,40" fill="url(#g2)" stroke="#0288d1" stroke-width="1" opacity="0.7"/>
+<polygon points="30,15 10,40 50,40" fill="#b3e5fc" opacity="0.6"/>
+<polygon points="70,15 90,40 50,40" fill="#4fc3f7" opacity="0.5"/>
+<polygon points="10,40 50,90 50,40" fill="#0288d1" opacity="0.3"/>
+<polygon points="90,40 50,90 50,40" fill="#01579b" opacity="0.3"/>
+<ellipse cx="40" cy="25" rx="6" ry="3" fill="#fff" opacity="0.8" transform="rotate(-30,40,25)"/>
+</svg>
+</div>
+</div>
+<button class="btn" id="openBtn">Открыть сундук</button>
 <script>
-const lid  = document.getElementById('lid');
-const gem  = document.getElementById('gem');
-const glow = document.getElementById('glow');
-const btn  = document.getElementById('openBtn');
-let phase  = 'idle';
-
-btn.addEventListener('click', () => {
-  if (phase === 'idle') {
-    phase = 'opening';
-    btn.disabled = true;
-    glow.classList.add('active');
-    lid.classList.add('open');
-
-    setTimeout(() => {
-      gem.classList.add('fly');
-      spawnSparks();
-    }, 700);
-
-    setTimeout(() => {
-      btn.textContent = '💎 Алмаз получен!';
-      btn.style.background = 'linear-gradient(135deg, #40c4ff, #0091ea)';
-      btn.style.color = '#fff';
-      btn.disabled = false;
-      phase = 'done';
-    }, 1900);
-  } else if (phase === 'done') {
-    lid.classList.remove('open');
-    gem.classList.remove('fly');
-    glow.classList.remove('active');
-    btn.textContent = '🔓 Открыть сундук';
-    btn.style.background = '';
-    btn.style.color = '';
-    phase = 'idle';
-  }
-});
-
-function spawnSparks() {
-  const scene = document.querySelector('.scene');
-  for (let i = 0; i < 12; i++) {
-    const sp = document.createElement('div');
-    sp.className = 'spark';
-    sp.style.left = '150px';
-    sp.style.bottom = '90px';
-    const angle = (Math.PI * 2 * i) / 12 + Math.random() * 0.5;
-    const dist = 60 + Math.random() * 40;
-    sp.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-    sp.style.setProperty('--dy', -Math.sin(angle) * dist - 20 + 'px');
-    sp.style.animation = 'sparkFly ' + (0.5 + Math.random() * 0.4) + 's ease-out forwards';
-    scene.appendChild(sp);
-    setTimeout(() => sp.remove(), 1000);
-  }
-}
+const lid=document.getElementById('lid'),gem=document.getElementById('gem'),glow=document.getElementById('glow'),btn=document.getElementById('openBtn');
+let phase='idle';
+btn.addEventListener('click',()=>{
+if(phase==='idle'){
+phase='opening';btn.disabled=true;glow.classList.add('active');lid.classList.add('open');
+setTimeout(()=>{gem.classList.add('fly');spawnSparks();},700);
+setTimeout(()=>{btn.textContent='Алмаз получен!';btn.style.background='linear-gradient(135deg,#40c4ff,#0091ea)';btn.style.color='#fff';btn.disabled=false;phase='done';},1900);
+}else if(phase==='done'){
+lid.classList.remove('open');gem.classList.remove('fly');glow.classList.remove('active');
+btn.textContent='Открыть сундук';btn.style.background='';btn.style.color='';phase='idle';
+}});
+function spawnSparks(){
+const scene=document.querySelector('.scene');
+for(let i=0;i<12;i++){
+const sp=document.createElement('div');sp.className='spark';
+sp.style.left='50%';sp.style.bottom='45%';
+const angle=(Math.PI*2*i)/12+Math.random()*0.5;const dist=60+Math.random()*40;
+sp.style.setProperty('--dx',Math.cos(angle)*dist+'px');
+sp.style.setProperty('--dy',-Math.sin(angle)*dist-20+'px');
+sp.style.animation='sparkFly '+(0.5+Math.random()*0.4)+'s ease-out forwards';
+scene.appendChild(sp);setTimeout(()=>sp.remove(),1000);
+}}
 </script>
-
 </body>
 </html>
